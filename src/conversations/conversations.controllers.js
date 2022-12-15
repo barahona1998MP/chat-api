@@ -16,6 +16,21 @@ const findAllConversations = async () => {
     return data
 }
 
+const findConversationById = async (id) => {
+    const data = await Conversations.findOne({
+        where: {
+            id: id
+        },
+        include: {
+            model: Participants,
+            include: {
+                model: Users
+            }
+        }
+    })
+    return data
+}
+
 const createConversation = async (obj) => {
     const newConversation = await Conversations.create({
         id: uuid.v4(),
@@ -41,9 +56,30 @@ const createConversation = async (obj) => {
     }
 }
 
+const updateConversation = async (id, obj) => {
+    const data = await Conversations.update(obj, {
+        where: {
+            id: id
+        }
+    })
+    return data[0]
+}
+
+const removeConversation = async (id) => {
+    const data = await Conversations.destroy({
+        where: {
+            id: id
+        }
+    })
+    return data
+}
+
 module.exports = {
     findAllConversations,
-    createConversation
+    findConversationById,
+    createConversation,
+    updateConversation,
+    removeConversation
 }
 
 /* createConversation({
